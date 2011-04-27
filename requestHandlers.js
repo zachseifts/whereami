@@ -5,7 +5,11 @@ function loc(response, request) {
   var command = 'redis-cli LPUSH location.ips "' + request.connection.remoteAddress + '"';
   exec(command, { timeout: 10000, maxBuffer: 20000*1024 },
     function (error, stdout, stderr) {
-      response.writeHead(200, {"Content-Type": "text/html"});
+      response.writeHead(200, {"Content-Type": "text/json"});
+      var obj = {
+        'ip': request.connection.remoteAddress,
+      };
+      response.write(JSON.stringify(obj));
       response.end();
       console.log(stdout);
     });
